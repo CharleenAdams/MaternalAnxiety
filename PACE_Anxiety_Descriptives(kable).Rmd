@@ -1,0 +1,85 @@
+---
+title: "PACE_Anxiety_Descriptives"
+author: "Charleen D. Adams"
+date: "February 28, 2018"
+output: html_document
+---
+
+```{r }
+##########################################################################################
+# Descriptives tables example script starts here
+#load packages and data #####
+setwd("~/Dropbox/Bristol") #home
+#setwd("C:/Users/ca16591/Dropbox/Bristol") #Oakfield
+library(Hmisc)
+library(psych)
+win_pheno <- readRDS("winsored.pheno.RData")
+#load("SpecificAnxiety.data.Rdata")
+describe(win_pheno)
+head(win_pheno)
+x=win_pheno
+x$anx_general_contwins <- x$anx.contwins
+x$GenderMale <- x$sex
+x$maternalagewins <- x$mat.age
+x$anxdich <- x$anx.dichot
+x$weightwins <- x$bw.wins
+x$gestationalagewins <- x$gest.wins
+x$SES <- x$mat.ses
+
+colnames(x)
+#describe(SpecificAnxiety.data)
+
+##########################################################################################
+# Characteristics table (file 6)
+#ONLY GIVES ESTIMATES FOR SES IF CONTINUOUS AND NUMERIC. Alter if SES is categorical.
+#assumes no anx or anx specific data in each specific dataset 
+Charateristicsfunction<- function(x) { 
+  n <- length(x$aln) 
+  meananx <- ifelse(!is.null(x$anx_general_contwins), mean(x$anx_general_contwins), NA)
+  sdanx <- ifelse(!is.null(x$anx_general_contwins), sd(x$anx_general_contwins), NA)
+  minanx <- ifelse(!is.null(x$anx_general_contwins), min(x$anx_general_contwins), NA)
+  maxanx <- ifelse(!is.null(x$anx_general_contwins), max(x$anx_general_contwins), NA)
+  skewanx <- ifelse(!is.null(x$anx_general_contwins), skew(x$anx_general_contwins), NA)
+  highanx <- ifelse(!is.null(x$anxdich), sum(x$anxdich==1), NA) #high anx 
+  lowanx <- ifelse(!is.null(x$anxdich), sum(x$anxdich==0), NA) #low anx 
+  anxpart <- rbind(n, meananx, sdanx, minanx,  maxanx, skewanx, highanx, lowanx)
+  nfemales <-sum(x$GenderMale==0)
+  nmales <-sum(x$GenderMale==1)
+  meanmaternalage <- mean(x$maternalagewins) 
+  sdmaternalage <-  sd(x$maternalagewins)
+  minmaternalage <- min(x$maternalagewins)
+  maxmaternalage <- max(x$maternalagewins)
+  x$msmoke_no <- ifelse(x$mat.smoke, 1, 0 )
+  nsmokenever <-sum(x$msmoke_no==1)
+  nmsmoke_early <-sum(x$mat.smoke==1)
+  nmsmoke_throughout  <-sum(x$mat.smoke ==2)
+  meanweight <- mean(x$weightwins) 
+  sdweight <-  sd(x$weightwins)
+  minweight <- min(x$weightwins)
+  maxweight <- max(x$weightwins)
+  meangestationalage <- mean(x$gestationalagewins) 
+  sdgestationalage <-  sd(x$gestationalagewins)
+  mingestationalage <- min(x$gestationalagewins)
+  maxgestationalage <- max(x$gestationalagewins)
+  meanpsych.meds <- mean(x$psych.meds)
+  sdpsych.meds <- sd(x$psych.meds)
+  minpsych.meds <- min(x$psych.meds)
+  maxpsych.meds <- max(x$psych.meds)
+  lowSES <- ifelse(!is.null(x$SES), sum(x$SES==0), NA) #low SES
+  Tabledescriptives <- rbind(anxpart, nfemales,nmales, meanmaternalage, sdmaternalage,
+                             minmaternalage, maxmaternalage, nsmokenever, nmsmoke_early, 
+                             nmsmoke_throughout, meanweight, sdweight, minweight,maxweight,
+                             meangestationalage, sdgestationalage, mingestationalage, maxgestationalage,
+                             meanpsych.meds, sdpsych.meds, lowSES) #putting everything in a table
+  Tabledescriptives <- round(Tabledescriptives,2)
+  Tabledescriptives 
+}
+
+#for models 1,2,4,5
+#table1.2.4.5 <- Charateristicsfunction(GeneralAnxiety.data)
+table1.2.4.5 <- Charateristicsfunction(x)
+
+#to kable into a Markdown table
+kable_table1.2.4.5 <- as.data.frame(table1.2.4.5)
+kable_table1.2.4.5 
+```
