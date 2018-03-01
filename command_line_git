@@ -1,0 +1,8 @@
+# This is the terminal/bluecrystal code needed to push from Git in R to Git hub
+
+git remote add origin https://github.com/CharleenAdams/MaternalAnxiety.git
+git config remote.origin.url 
+git@github.com:CharleenAdams/MaternalAnxiety.git
+
+git pull -u origin master
+git push -u origin master
