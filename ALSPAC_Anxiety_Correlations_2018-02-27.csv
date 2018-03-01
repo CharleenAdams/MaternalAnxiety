@@ -1,0 +1,5 @@
+"","anx_general_contwins","maternalagewins","weightwins","gestationalagewins"
+"anx_general_contwins",NA,"-0.08 *","-0.022 *","-0.033 *"
+"maternalagewins","-0.08 *",NA,"0.062 *","-0.025 *"
+"weightwins","-0.022 *","0.062 *",NA,"0.455 *"
+"gestationalagewins","-0.033 *","-0.025 *","0.455 *",NA
